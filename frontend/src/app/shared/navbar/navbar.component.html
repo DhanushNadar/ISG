@@ -1,0 +1,22 @@
+<header class="main-header">
+  <div class="nav-brand" routerLink="/">
+    <div class="logo">
+      <span class="logo-icon">+</span> BloodBank
+    </div>
+  </div>
+  
+  <nav class="nav-links" *ngIf="isLoggedIn">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+    <a routerLink="/patients" routerLinkActive="active" class="nav-link">Patients Directory</a>
+  </nav>
+
+  <div class="auth-menu">
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/login" class="nav-link" style="margin-right: 15px;">Sign In</a>
+      <a routerLink="/register" class="btn-primary" style="padding: 0.4rem 1rem">Register</a>
+    </ng-container>
+    <ng-container *ngIf="isLoggedIn">
+      <button class="btn-secondary" style="padding: 0.4rem 1rem" (click)="logout()">Sign Out</button>
+    </ng-container>
+  </div>
+</header>

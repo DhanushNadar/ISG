@@ -1,0 +1,74 @@
+<div class="dashboard-header">
+  <div>
+    <h1 class="page-title">Management Dashboard</h1>
+    <p class="subtitle">System Overview and Quick Actions</p>
+  </div>
+  <button class="btn-primary" routerLink="/patients">+ Register Patient</button>
+</div>
+
+<div class="stats-grid">
+  <!-- Patients Stat -->
+  <div class="stat-card clinical-card">
+    <div class="stat-icon patient-icon">
+      <i class="icon-text">P</i>
+    </div>
+    <div class="stat-info">
+      <p>Registered Patients</p>
+      <h3>{{ patients.length }}</h3>
+    </div>
+  </div>
+
+  <!-- Hospitals Stat -->
+  <div class="stat-card clinical-card">
+    <div class="stat-icon hospital-icon">
+      <i class="icon-text">H</i>
+    </div>
+    <div class="stat-info">
+      <p>Network Hospitals</p>
+      <h3>{{ hospitals.length }}</h3>
+    </div>
+  </div>
+
+  <!-- Diseases Tracked -->
+  <div class="stat-card clinical-card">
+    <div class="stat-icon disease-icon">
+      <i class="icon-text">D</i>
+    </div>
+    <div class="stat-info">
+      <p>Pathologies Tracked</p>
+      <h3>{{ diseases.length }}</h3>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2col">
+  <div class="clinical-card list-view">
+    <div class="card-header">
+      <h2>Network Hospitals</h2>
+    </div>
+    <div class="skeleton-loader" *ngIf="isLoading">Loading...</div>
+    <ul *ngIf="!isLoading">
+      <li *ngFor="let h of hospitals; let last = last" class="list-item" [class.no-border]="last">
+        <div class="item-title">{{ h.name }}</div>
+        <div class="muted">{{ h.location }}</div>
+      </li>
+      <li *ngIf="hospitals.length === 0" class="muted p-2">No hospitals in network.</li>
+    </ul>
+  </div>
+
+  <div class="clinical-card list-view">
+    <div class="card-header">
+      <h2>Tracked Diseases</h2>
+    </div>
+    <div class="skeleton-loader" *ngIf="isLoading">Loading...</div>
+    <ul *ngIf="!isLoading">
+      <li *ngFor="let d of diseases; let last = last" class="list-item flex-between" [class.no-border]="last">
+        <div class="item-title">{{ d.name }}</div>
+        <span class="badge" [class.badge-major]="d.isMajor">
+          {{ d.isMajor ? 'MAJOR' : 'MINOR' }}
+        </span>
+      </li>
+      <li *ngIf="diseases.length === 0" class="muted p-2">No diseases tracked.</li>
+    </ul>
+  </div>
+</div>

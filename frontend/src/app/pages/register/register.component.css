@@ -1,0 +1,7 @@
+@import '../login/login.component.css';
+
+/* Uses exactly the same styles as Login injected via import, plust specific tweaks if necessary */
+select.form-control {
+  appearance: auto;
+  cursor: pointer;
+}

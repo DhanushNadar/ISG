@@ -1,0 +1,71 @@
+<div class="mb-4 pt-layout">
+  <button routerLink="/patients" class="btn-secondary">&larr; Back to Directory</button>
+</div>
+
+<div *ngIf="isLoading" class="clinical-card mt-4">
+  <p class="text-center p-4">Loading Patient Data...</p>
+</div>
+
+<div *ngIf="error" class="clinical-card mt-4 alert-danger">
+  <p class="text-center p-4"><strong>Error:</strong> {{ error }}</p>
+</div>
+
+<div *ngIf="!isLoading && profile" class="profile-layout">
+  
+  <!-- Main Identity Banner -->
+  <div class="identity-panel clinical-card">
+    <div class="identity-header">
+      <div class="avatar">{{ profile.name ? profile.name.charAt(0) : '?' }}</div>
+      <div class="identity-info">
+        <h1>{{ profile.name || 'Unknown' }}</h1>
+        <p class="aadhaar">Aadhaar: <span class="mono">{{ aadhaar }}</span></p>
+      </div>
+      
+      <div class="eligibility-status">
+        <span class="status-label">Donation Eligibility</span>
+        <div [ngClass]="profile.eligibility === 'ELIGIBLE' ? 'tag-eligible tag-large' : 'tag-not-eligible tag-large'">
+           {{ profile.eligibility || 'UNKNOWN' }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="demographics">
+      <div class="demo-box"><label>Blood Group</label><span class="blood">{{ profile.bloodGroup || 'N/A' }}</span></div>
+      <div class="demo-box"><label>Recent Hospital</label><span>{{ profile.recentHospital || 'None' }}</span></div>
+      <div class="demo-box"><label>Recent Test</label><span>{{ profile.recentTestDate || 'No Tests' }}</span></div>
+      <div class="demo-box"><label>Major Condition</label><span class="major-disease-text">{{ profile.majorDisease || 'None' }}</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2col mt-4">
+    
+    <!-- Pathologies / Diseases -->
+    <div class="clinical-card full-span p-0">
+      <div class="card-header">
+        <h2>Disease History (Pathologies)</h2>
+      </div>
+      
+      <div class="empty-state" *ngIf="!profile.history || profile.history.length === 0">
+        No recorded diseases for this patient.
+      </div>
+      
+      <ul class="clean-list" *ngIf="profile.history && profile.history.length > 0">
+        <li *ngFor="let d of profile.history; let last = last" class="list-card flex-between" [class.no-border]="last">
+          <div>
+            <div class="disease-title">
+              <strong>{{ d.diseaseName }}</strong>
+              <span *ngIf="d.isMajor" class="badge badge-major ml-2">MAJOR</span>
+              <span *ngIf="d.isCurrent" class="badge badge-current ml-2">CURRENT DIAGNOSIS</span>
+            </div>
+            <div class="muted mt-1">Diagnosed on: {{ d.diagnosedDate }}</div>
+          </div>
+          <div>
+             <span class="status-badge" [class.active-disease]="d.status === 'ACTIVE'" [class.recovered-disease]="d.status === 'RECOVERED'">{{ d.status }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>

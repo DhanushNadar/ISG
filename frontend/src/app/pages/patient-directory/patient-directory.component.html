@@ -1,0 +1,50 @@
+<div class="directory-header">
+  <div>
+    <h1 class="page-title">Patient Directory</h1>
+    <p class="subtitle">Complete tracking of all registered blood bank patients</p>
+  </div>
+</div>
+
+<div class="clinical-card table-container">
+  <div class="table-actions">
+    <div class="search-bar">
+      <input type="text" placeholder="Search by Aadhaar or Name..." class="input-search">
+    </div>
+  </div>
+
+  <table class="standard-table">
+    <thead>
+      <tr>
+        <th>Aadhaar Number</th>
+        <th>Full Name</th>
+        <th>Blood Group</th>
+        <th>Age/Gender</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="isLoading">
+        <td colspan="6" class="text-center p-4">Loading patient data...</td>
+      </tr>
+      <tr *ngFor="let p of patients" class="table-row">
+        <td class="aadhaar-cell">{{ p.aadhaarNumber }}</td>
+        <td class="primary-text"><strong>{{ p.name }}</strong></td>
+        <td>
+          <span class="blood-badge">{{ p.bloodGroup }}</span>
+        </td>
+        <td class="muted">{{ p.age }} Yrs, {{ p.gender }}</td>
+        <td class="muted">{{ p.phone }}</td>
+        <td>
+          <button class="btn-secondary btn-sm" (click)="viewProfile(p.aadhaarNumber)">
+            View Profile &rarr;
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="empty-state" *ngIf="!isLoading && patients.length === 0">
+    <p>No patients found. Register one to get started.</p>
+  </div>
+</div>

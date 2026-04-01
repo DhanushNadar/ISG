@@ -1,0 +1,104 @@
+.directory-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.table-container {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  background-color: #fafbfc;
+}
+
+.input-search {
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  width: 300px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+.input-search:focus {
+  outline: none;
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2);
+}
+
+.standard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.standard-table th {
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--card-border);
+  background-color: #f8fafc;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.standard-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.table-row {
+  transition: background 0.1s;
+}
+
+.table-row:hover {
+  background-color: #f1f5f9;
+}
+
+.table-row:last-child td {
+  border-bottom: none;
+}
+
+.aadhaar-cell {
+  font-family: monospace;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  background: #f1f5f9;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.primary-text {
+  color: var(--text-primary);
+}
+
+.blood-badge {
+  background-color: var(--accent-primary);
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  background-color: transparent;
+}
+
+.text-center { text-align: center; }
+.p-4 { padding: 2rem; }
+.empty-state { text-align: center; color: var(--text-secondary); padding: 3rem 0; font-size: 1rem; }
+.muted { color: var(--text-secondary); font-size: 0.9rem; }

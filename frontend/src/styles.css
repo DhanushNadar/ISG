@@ -1,0 +1,135 @@
+/* Global Styles for Standard Clinical Medical UI */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Clean Light Mode Aesthetic */
+  --bg-main: #f4f6f9;         /* Very soft gray/blue for main background */
+  --bg-card: #ffffff;         /* Pure white for content cards */
+  --card-border: #e2e8f0;     /* Soft border for structure */
+  
+  --text-primary: #1e293b;    /* Dark slate for high contrast readability */
+  --text-secondary: #64748b;  /* Muted slate for secondary text */
+  --text-muted: #94a3b8;
+  
+  --accent-primary: #d32f2f;  /* Standard Medical/Blood Red */
+  --accent-hover: #b71c1c;    
+  
+  --accent-success: #10b981;  /* Standard Green for Eligible */
+  --accent-danger: #ef4444;   /* Standard Red for Not Eligible */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Core Layout & Components */
+.page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.clinical-card {
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  padding: 0.6rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 1px solid var(--card-border);
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.tag-eligible {
+    background-color: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.tag-not-eligible {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
