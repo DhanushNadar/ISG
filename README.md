@@ -82,4 +82,43 @@ The entire system is secured behind robust Route Guards.
 3. Upon registration, you will be granted an encrypted JWT Bearer Token, logging you in.
 4. You may now access the `/dashboard` to view statistics and root into global `/patients`.
 
-*Happy Developing!* 🚀
+---
+
+## 📦 Production Builds (Creating Deployable WAR / Assets)
+
+When it's time to test your application on an external server (like Apache Tomcat or AWS), you can create compiled and bundled variations of your application!
+
+### 1. Unified Full-Stack Archetype (Backend + Frontend together)
+This command builds a single `.war` file that contains BOTH the Java Backend API securely serving the Frontend Angular HTML.
+```bash
+# DIR: ISG/frontend
+# Compile the Angular frontend for production
+npx ng build
+
+# Copy the generated assets over to Spring Boot
+# Move contents of `frontend/dist/frontend/browser` -> `bloodbank/src/main/resources/static`
+
+# DIR: ISG/bloodbank
+# Compile the unified WAR file
+./mvnw clean package -DskipTests
+```
+Your final file will be generated at `ISG/bloodbank/target/bloodbank-0.0.1-SNAPSHOT.war`. You can deploy this exact file into Tomcat's `/webapps` directory!
+
+### 2. Standalone Backend Build (Spring Server Only)
+If you want to host your Java Backend strictly as a standalone API on a server without serving any UI files locally, you can build a backend-only WAR package.
+```bash
+# DIR: ISG/bloodbank
+# First, ensure the 'static' folder (src/main/resources/static) is totally empty so no UI is bundled.
+./mvnw clean package -DskipTests
+```
+This drops the same `.war` into `target/`, but without the bloat of external web pages.
+
+### 3. Standalone Frontend Build (Angular Only)
+*Note: Angular is a pure Javascript framework, so it doesn't actually produce Java `.war` files. It produces standard web output for Nginx, Vercel, or Apache.*
+```bash
+# DIR: ISG/frontend
+npm run build
+```
+Your static minified files will be inside `dist/frontend/browser`. Take those `.js`, `.css`, and `index.html` files and drop them directly into your static web server (like NGINX)!
+
+Happy Developing! 🚀
