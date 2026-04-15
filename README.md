@@ -102,7 +102,12 @@ npx ng build
 # Compile the unified WAR file
 ./mvnw clean package -DskipTests
 ```
-Your final file will be generated at `ISG/bloodbank/target/bloodbank-0.0.1-SNAPSHOT.war`. You can deploy this exact file into Tomcat's `/webapps` directory!
+Your final file will be generated at `ISG/bloodbank/target/bloodbank-0.0.1-SNAPSHOT.war`. You can deploy this exact file into Tomcat's `/webapps` directory, or immediately stand it up locally via:
+
+```bash
+# DIR: ISG/bloodbank
+java -jar target/bloodbank-0.0.1-SNAPSHOT.war
+```
 
 ### 2. Standalone Backend Build (Spring Server Only)
 If you want to host your Java Backend strictly as a standalone API on a server without serving any UI files locally, you can build a backend-only WAR package.
