@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api/auth';
+  private readonly API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080/api/auth' 
+    : 'https://isg-production.up.railway.app/api/auth';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 

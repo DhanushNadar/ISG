@@ -11,7 +11,9 @@ import {
 })
 export class ApiService {
 
-  private readonly API_URL = 'http://localhost:8080/api';
+  private readonly API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080/api' 
+    : 'https://isg-production.up.railway.app/api';
 
   constructor(private http: HttpClient) { }
 
