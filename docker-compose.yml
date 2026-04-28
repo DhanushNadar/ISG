@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pg-bloodbank
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bloodbank
+      TZ: UTC
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./bloodbank
+      dockerfile: Dockerfile
+    container_name: bloodbank-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Override the local localhost config to point to the db container
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bloodbank
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      # Inject your resend API Key
+      - RESEND_API_KEY=${RESEND_API_KEY:-re_dbMWsLg6_MnvT5LT9L1nxHZMGQSYTkXE9}
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bloodbank-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
