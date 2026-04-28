@@ -3,7 +3,9 @@ package com.example.bloodbank.controller;
 import com.example.bloodbank.dto.PatientDTO;
 import com.example.bloodbank.dto.PatientProfileResponse;
 import com.example.bloodbank.service.PatientService;
+import com.example.bloodbank.entity.User;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,14 +24,14 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping
-    public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO dto) {
-        return new ResponseEntity<>(patientService.createPatient(dto), HttpStatus.CREATED);
+    public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO dto, @AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(patientService.createPatient(dto, user), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<PatientDTO>> getAllPatients() {
-        log.info("Fetching complete patient directory.");
-        return ResponseEntity.ok(patientService.getAllPatients());
+    public ResponseEntity<List<PatientDTO>> getAllPatients(@AuthenticationPrincipal User user) {
+        log.info("Fetching complete patient directory for user.");
+        return ResponseEntity.ok(patientService.getAllPatients(user));
     }
 
     @GetMapping("/{aadhaar}")

@@ -1,0 +1,94 @@
+.dashboard-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    color: var(--text-primary);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.directory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.directory-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.directory-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.patient-info h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.patient-meta {
+    display: flex;
+    gap: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.success-banner {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    margin-bottom: 1rem;
+}
+
+.error-banner {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(231, 76, 60, 0.2);
+    margin-bottom: 1rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+}

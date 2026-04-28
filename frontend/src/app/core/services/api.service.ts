@@ -41,6 +41,10 @@ export class ApiService {
     return this.http.post<HospitalDTO>(`${this.API_URL}/hospitals`, hospital);
   }
 
+  broadcastEmergency(bloodGroup: string): Observable<{success: boolean, message: string, donorsAlerted: number}> {
+    return this.http.post<any>(`${this.API_URL}/hospitals/broadcast`, { bloodGroup });
+  }
+
   // Diseases
   getDiseases(): Observable<DiseaseDTO[]> {
     return this.http.get<DiseaseDTO[]>(`${this.API_URL}/diseases`);

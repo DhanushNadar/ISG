@@ -133,3 +133,37 @@ button {
     font-size: 0.85rem;
     font-weight: 600;
 }
+
+/* Global Form Controls */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.w-100 {
+  width: 100%;
+}

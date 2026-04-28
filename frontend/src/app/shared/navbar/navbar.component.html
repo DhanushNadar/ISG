@@ -5,9 +5,10 @@
     </div>
   </div>
   
-  <nav class="nav-links" *ngIf="isLoggedIn">
-    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-    <a routerLink="/patients" routerLinkActive="active" class="nav-link">Patients Directory</a>
+  <nav class="nav-links">
+    <a routerLink="/dashboard" routerLinkActive="active" *ngIf="isLoggedIn" class="nav-link">Dashboard</a>
+    <a routerLink="/patients" routerLinkActive="active" *ngIf="isLoggedIn" class="nav-link">Patient Directory</a>
+    <a routerLink="/admin" routerLinkActive="active" *ngIf="authService.isAdmin()" class="nav-link">Admin Panel</a>
   </nav>
 
   <div class="auth-menu">

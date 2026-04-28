@@ -6,6 +6,7 @@ export interface PatientDTO {
     gender: string;
     bloodGroup: string;
     phone: string;
+    email?: string;
     createdAt?: string;
 }
 

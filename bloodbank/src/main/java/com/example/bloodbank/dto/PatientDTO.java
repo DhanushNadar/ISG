@@ -25,4 +25,7 @@ public class PatientDTO {
     private String gender;
     private String bloodGroup;
     private String phone;
+    private String email;
+    private Long hospitalId;
+    private String hospitalName;
 }

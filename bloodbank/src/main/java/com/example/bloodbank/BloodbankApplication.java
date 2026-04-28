@@ -8,11 +8,17 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import java.util.TimeZone;
 
+import jakarta.annotation.PostConstruct;
+
 @SpringBootApplication
 public class BloodbankApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
+	@PostConstruct
+	public void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
+
+	public static void main(String[] args) {
 		SpringApplication.run(BloodbankApplication.class, args);
 	}
 

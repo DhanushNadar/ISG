@@ -1,7 +1,37 @@
-<div class="directory-header">
+<div class="directory-header" style="display: flex; justify-content: space-between; align-items: center;">
   <div>
     <h1 class="page-title">Patient Directory</h1>
     <p class="subtitle">Complete tracking of all registered blood bank patients</p>
+  </div>
+  <button *ngIf="authService.isHospital()" class="btn-primary" (click)="goToAddPatient()">
+    + Register New Patient
+  </button>
+</div>
+
+<div *ngIf="authService.isHospital()" class="clinical-card emergency-panel">
+  <div class="emergency-content">
+    <div class="emergency-text">
+      <h3>🚨 Emergency Broadcast System</h3>
+      <p>Instantly email all eligible, healthy donors who match a specific blood group.</p>
+    </div>
+    <div class="emergency-actions">
+      <select [(ngModel)]="selectedBloodGroup" class="blood-select">
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+      </select>
+      <button class="btn-danger" (click)="triggerBroadcast()" [disabled]="isBroadcasting">
+        {{ isBroadcasting ? 'Broadcasting...' : 'Broadcast Need' }}
+      </button>
+    </div>
+  </div>
+  <div *ngIf="broadcastMessage" class="broadcast-toast">
+    {{ broadcastMessage }}
   </div>
 </div>
 

@@ -13,6 +13,10 @@ import com.example.bloodbank.repository.DiseaseRepository;
 import com.example.bloodbank.repository.HospitalRepository;
 import com.example.bloodbank.repository.PatientDiseaseRepository;
 import com.example.bloodbank.repository.PatientRepository;
+import com.example.bloodbank.repository.UserRepository;
+import com.example.bloodbank.entity.User;
+import com.example.bloodbank.entity.Role;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -30,6 +34,8 @@ public class SampleDataLoader implements CommandLineRunner {
     private final PatientDiseaseRepository patientDiseaseRepository;
     private final BloodRecordRepository bloodRecordRepository;
     private final BloodDonationRepository bloodDonationRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,6 +45,15 @@ public class SampleDataLoader implements CommandLineRunner {
             diseaseRepository.save(Disease.builder().name("HIV").isMajor(true).description("Human immunodeficiency virus").build());
             diseaseRepository.save(Disease.builder().name("Hepatitis B").isMajor(true).description("Serious liver infection").build());
             diseaseRepository.save(Disease.builder().name("Malaria").isMajor(false).description("Mosquito-borne infectious disease").build());
+        }
+        
+        if (userRepository.findByEmail("admin@bloodbank.com").isEmpty()) {
+            User admin = User.builder()
+                .email("admin@bloodbank.com")
+                .password(passwordEncoder.encode("admin"))
+                .role(Role.ADMIN)
+                .build();
+            userRepository.save(admin);
         }
 
         if (hospitalRepository.count() == 0) {
@@ -55,7 +70,7 @@ public class SampleDataLoader implements CommandLineRunner {
             Disease hiv = diseaseRepository.findByNameIgnoreCase("HIV").get();
 
             // PATIENT 1: John Doe (NOT_ELIGIBLE due to active Leukemia)
-            Patient patient1 = Patient.builder().aadhaarNumber("123456789012").name("John Doe").age(30).gender("Male").bloodGroup("O+").phone("9876543210").createdAt(LocalDateTime.now()).build();
+            Patient patient1 = Patient.builder().aadhaarNumber("123456789012").name("John Doe").age(30).gender("Male").bloodGroup("O+").phone("9876543210").email("johndoe@example.com").createdAt(LocalDateTime.now()).hospital(hospital1).build();
             patient1 = patientRepository.save(patient1);
 
             bloodRecordRepository.save(BloodRecord.builder().patient(patient1).hospital(hospital1).hemoglobin(11.5).platelets(150000.0).rbc(4.5).wbc(8000.0).recordDate(LocalDate.now().minusDays(10)).build());
@@ -64,7 +79,7 @@ public class SampleDataLoader implements CommandLineRunner {
             bloodDonationRepository.save(BloodDonation.builder().patient(patient1).donationDate(LocalDate.now().minusYears(2)).quantityMl(450.0).build());
 
             // PATIENT 2: Jane Smith (ELIGIBLE - Totally healthy, perfect blood levels)
-            Patient patient2 = Patient.builder().aadhaarNumber("555566667777").name("Jane Smith").age(28).gender("Female").bloodGroup("A-").phone("8234567891").createdAt(LocalDateTime.now()).build();
+            Patient patient2 = Patient.builder().aadhaarNumber("555566667777").name("Jane Smith").age(28).gender("Female").bloodGroup("A-").phone("8234567891").email("janesmith@example.com").createdAt(LocalDateTime.now()).hospital(hospital2).build();
             patient2 = patientRepository.save(patient2);
 
             bloodRecordRepository.save(BloodRecord.builder().patient(patient2).hospital(hospital2).hemoglobin(14.0).platelets(250000.0).rbc(5.2).wbc(6500.0).recordDate(LocalDate.now().minusDays(2)).build());
@@ -72,7 +87,7 @@ public class SampleDataLoader implements CommandLineRunner {
             bloodDonationRepository.save(BloodDonation.builder().patient(patient2).donationDate(LocalDate.now().minusYears(1)).quantityMl(450.0).build());
 
             // PATIENT 3: Bob Brown (NOT_ELIGIBLE due to active HIV)
-            Patient patient3 = Patient.builder().aadhaarNumber("999988887777").name("Bob Brown").age(45).gender("Male").bloodGroup("AB+").phone("7654321098").createdAt(LocalDateTime.now()).build();
+            Patient patient3 = Patient.builder().aadhaarNumber("999988887777").name("Bob Brown").age(45).gender("Male").bloodGroup("AB+").phone("7654321098").email("bob.brown@example.com").createdAt(LocalDateTime.now()).hospital(hospital1).build();
             patient3 = patientRepository.save(patient3);
 
             bloodRecordRepository.save(BloodRecord.builder().patient(patient3).hospital(hospital1).hemoglobin(12.1).platelets(200000.0).rbc(4.8).wbc(5000.0).recordDate(LocalDate.now().minusYears(1)).build());

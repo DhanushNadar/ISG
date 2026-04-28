@@ -13,7 +13,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  register(data: any): Observable<any> {
+  register(data: {email: string, password: string, role: string, hospitalId?: number}): Observable<any> {
     return this.http.post(`${this.API_URL}/register`, data).pipe(
       tap((res: any) => this.setToken(res.token))
     );
@@ -42,5 +42,26 @@ export class AuthService {
   private setToken(token: string): void {
     localStorage.setItem('jwt_token', token);
     this.isAuthenticatedSubject.next(true);
+  }
+
+  getRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1];
+      // Basic base64 decoding for JWT payload
+      const decoded = atob(payload);
+      return JSON.parse(decoded).role;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  isHospital(): boolean {
+    return this.getRole() === 'HOSPITAL';
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
   }
 }

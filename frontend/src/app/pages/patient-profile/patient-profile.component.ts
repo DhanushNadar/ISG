@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { AuthService } from '../../core/services/auth.service';
 import { PatientProfileResponse } from '../../core/models/api.models';
 
 @Component({
@@ -20,7 +21,8 @@ export class PatientProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,21 @@ export class PatientProfileComponent implements OnInit {
       error: (err) => {
         this.error = 'Profile not found.';
         this.isLoading = false;
+      }
+    });
+  }
+
+  markRecovered(patientDiseaseId: number) {
+    if (!confirm('Are you sure you want to mark this disease as recovered?')) return;
+    
+    this.apiService.updateDiseaseStatus(patientDiseaseId, 'RECOVERED').subscribe({
+      next: () => {
+        // Reload profile to recalculate eligibility and update UI
+        this.isLoading = true;
+        this.fetchProfile();
+      },
+      error: (err) => {
+        alert('Failed to update disease status.');
       }
     });
   }

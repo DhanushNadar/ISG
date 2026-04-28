@@ -6,9 +6,13 @@ import com.example.bloodbank.dto.PatientProfileResponse;
 import com.example.bloodbank.entity.BloodRecord;
 import com.example.bloodbank.entity.DiseaseStatus;
 import com.example.bloodbank.entity.Patient;
+import com.example.bloodbank.entity.Hospital;
+import com.example.bloodbank.entity.User;
+import com.example.bloodbank.entity.Role;
 import com.example.bloodbank.entity.PatientDisease;
 import com.example.bloodbank.exception.ResourceNotFoundException;
 import com.example.bloodbank.repository.BloodRecordRepository;
+import com.example.bloodbank.repository.HospitalRepository;
 import com.example.bloodbank.repository.PatientDiseaseRepository;
 import com.example.bloodbank.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +29,9 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final PatientDiseaseRepository patientDiseaseRepository;
     private final BloodRecordRepository bloodRecordRepository;
+    private final HospitalRepository hospitalRepository;
 
-    public PatientDTO createPatient(PatientDTO dto) {
+    public PatientDTO createPatient(PatientDTO dto, User user) {
         if (patientRepository.findByAadhaarNumber(dto.getAadhaarNumber()).isPresent()) {
             throw new IllegalArgumentException("Patient with this Aadhaar already exists");
         }
@@ -38,15 +43,29 @@ public class PatientService {
                 .gender(dto.getGender())
                 .bloodGroup(dto.getBloodGroup())
                 .phone(dto.getPhone())
+                .email(dto.getEmail())
                 .build();
+                
+        if (user.getRole() == Role.HOSPITAL && user.getHospitalId() != null) {
+            Hospital h = hospitalRepository.findById(user.getHospitalId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Hospital not found"));
+            patient.setHospital(h);
+        }
                 
         patient = patientRepository.save(patient);
         dto.setId(patient.getId());
         return dto;
     }
 
-    public List<PatientDTO> getAllPatients() {
-        return patientRepository.findAll().stream()
+    public List<PatientDTO> getAllPatients(User user) {
+        List<Patient> patients;
+        if (user.getRole() == Role.HOSPITAL && user.getHospitalId() != null) {
+            patients = patientRepository.findByHospitalId(user.getHospitalId());
+        } else {
+            patients = patientRepository.findAll();
+        }
+        
+        return patients.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
@@ -115,6 +134,9 @@ public class PatientService {
                 .gender(patient.getGender())
                 .bloodGroup(patient.getBloodGroup())
                 .phone(patient.getPhone())
+                .email(patient.getEmail())
+                .hospitalId(patient.getHospital() != null ? patient.getHospital().getId() : null)
+                .hospitalName(patient.getHospital() != null ? patient.getHospital().getName() : null)
                 .build();
     }
 

@@ -12,6 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -30,10 +33,18 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .hospitalId(request.getHospitalId())
                 .build();
                 
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        if (user.getHospitalId() != null) {
+            claims.put("hospitalId", user.getHospitalId());
+        }
+        
+        var jwtToken = jwtService.generateToken(claims, user);
         return AuthResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -50,7 +61,13 @@ public class AuthService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
                 
-        var jwtToken = jwtService.generateToken(user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        if (user.getHospitalId() != null) {
+            claims.put("hospitalId", user.getHospitalId());
+        }
+                
+        var jwtToken = jwtService.generateToken(claims, user);
         
         return AuthResponse.builder()
                 .token(jwtToken)

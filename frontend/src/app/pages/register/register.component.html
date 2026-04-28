@@ -28,6 +28,14 @@
         </select>
       </div>
 
+      <div class="form-group" *ngIf="role === 'HOSPITAL'">
+        <label for="hospital">Select Your Associated Hospital</label>
+        <select id="hospital" name="hospital" [(ngModel)]="hospitalId" class="form-control" required>
+          <option [ngValue]="null" disabled selected>-- Select a Hospital --</option>
+          <option *ngFor="let h of hospitals" [value]="h.id">{{ h.name }} ({{ h.location }})</option>
+        </select>
+      </div>
+
       <button type="submit" class="btn-primary w-100" [disabled]="isLoading">
         {{ isLoading ? 'Creating Account...' : 'Register' }}
       </button>

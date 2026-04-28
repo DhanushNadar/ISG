@@ -59,8 +59,9 @@
             </div>
             <div class="muted mt-1">Diagnosed on: {{ d.diagnosedDate }}</div>
           </div>
-          <div>
+          <div style="display: flex; gap: 1rem; align-items: center;">
              <span class="status-badge" [class.active-disease]="d.status === 'ACTIVE'" [class.recovered-disease]="d.status === 'RECOVERED'">{{ d.status }}</span>
+             <button *ngIf="d.status === 'ACTIVE' && authService.isHospital()" class="btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" (click)="markRecovered(d.id)">Mark Recovered</button>
           </div>
         </li>
       </ul>

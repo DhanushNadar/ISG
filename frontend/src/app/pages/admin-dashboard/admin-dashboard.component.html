@@ -1,0 +1,56 @@
+<div class="dashboard-container fade-in">
+  <div class="dashboard-header">
+    <h1>Super Admin Portal</h1>
+    <p>Manage Blood Bank Hospital Network</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="clinical-card">
+      <h3>Register New Hospital Facility</h3>
+      <div *ngIf="successMessage" class="success-banner">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+
+      <form (ngSubmit)="onSubmit()" class="mt-2">
+        <div class="form-group">
+          <label>Official Name</label>
+          <input type="text" name="name" [(ngModel)]="newHospital.name" class="form-control" placeholder="e.g. Apollo Hospital" required>
+        </div>
+        <div class="form-group mt-1">
+          <label>Location / City</label>
+          <input type="text" name="location" [(ngModel)]="newHospital.location" class="form-control" placeholder="e.g. Bangalore" required>
+        </div>
+        <div class="form-group mt-1">
+          <label>Contact Number</label>
+          <input type="tel" name="contactNumber" [(ngModel)]="newHospital.contactNumber" class="form-control" placeholder="e.g. 1800-102-103" required>
+        </div>
+        <button type="submit" class="btn-primary mt-2 w-100" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Registering...' : '+ Authorize Hospital' }}
+        </button>
+      </form>
+    </div>
+
+    <div class="clinical-card">
+      <h3>Authorized Network</h3>
+      <p class="text-muted">Total Facilities: {{ hospitals.length }}</p>
+      
+      <div class="directory-list mt-2">
+        <div class="directory-item" *ngFor="let h of hospitals">
+          <div class="patient-info">
+            <h4>{{ h.name }}</h4>
+            <div class="patient-meta">
+              <span>📍 {{ h.location }}</span>
+              <span>📞 {{ h.contactNumber }}</span>
+            </div>
+          </div>
+          <div class="action-btn-container">
+            <span class="status-badge status-recovered">VERIFIED</span>
+          </div>
+        </div>
+        
+        <div *ngIf="hospitals.length === 0" class="empty-state">
+          No hospitals registered yet.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

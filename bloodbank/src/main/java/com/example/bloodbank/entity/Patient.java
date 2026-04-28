@@ -30,10 +30,15 @@ public class Patient {
     private String gender;
     private String bloodGroup;
     private String phone;
+    private String email;
 
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
     
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

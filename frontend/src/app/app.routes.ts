@@ -6,12 +6,18 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
 
+import { AddPatientComponent } from './pages/add-patient/add-patient.component';
+
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+    { path: 'admin', component: AdminDashboardComponent, canActivate: [authGuard] },
     { path: 'patients', component: PatientDirectoryComponent, canActivate: [authGuard] },
+    { path: 'patients/add', component: AddPatientComponent, canActivate: [authGuard] },
     { path: 'patients/:aadhaar', component: PatientProfileComponent, canActivate: [authGuard] },
     { path: '**', redirectTo: 'dashboard' }
 ];
