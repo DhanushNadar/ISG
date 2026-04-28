@@ -106,7 +106,7 @@ Your final file will be generated at `ISG/bloodbank/target/bloodbank-0.0.1-SNAPS
 
 ```bash
 # DIR: ISG/bloodbank
-java -jar target/bloodbank-0.0.1-SNAPSHOT.war
+java "-Duser.timezone=UTC" -jar target\bloodbank-0.0.1-SNAPSHOT.war
 ```
 
 ### 2. Standalone Backend Build (Spring Server Only)
