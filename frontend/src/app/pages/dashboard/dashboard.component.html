@@ -1,74 +1,194 @@
 <div class="dashboard-header">
-  <div>
-    <h1 class="page-title">Management Dashboard</h1>
-    <p class="subtitle">System Overview and Quick Actions</p>
+  <div class="header-left">
+    <h1 class="page-title">Command Center</h1>
+    <p class="subtitle">Global Grid Overview and Quick Actions</p>
+    <a class="btn-primary mt-4" style="display: inline-block; text-decoration: none;" routerLink="/patients">+ Register Patient</a>
   </div>
-  <button class="btn-primary" routerLink="/patients">+ Register Patient</button>
-</div>
-
-<div class="stats-grid">
-  <!-- Patients Stat -->
-  <div class="stat-card clinical-card">
-    <div class="stat-icon patient-icon">
-      <i class="icon-text">P</i>
-    </div>
-    <div class="stat-info">
-      <p>Registered Patients</p>
-      <h3>{{ patients.length }}</h3>
-    </div>
-  </div>
-
-  <!-- Hospitals Stat -->
-  <div class="stat-card clinical-card">
-    <div class="stat-icon hospital-icon">
-      <i class="icon-text">H</i>
-    </div>
-    <div class="stat-info">
-      <p>Network Hospitals</p>
-      <h3>{{ hospitals.length }}</h3>
-    </div>
-  </div>
-
-  <!-- Diseases Tracked -->
-  <div class="stat-card clinical-card">
-    <div class="stat-icon disease-icon">
-      <i class="icon-text">D</i>
-    </div>
-    <div class="stat-info">
-      <p>Pathologies Tracked</p>
-      <h3>{{ diseases.length }}</h3>
+  
+  <div class="header-right">
+    <!-- Dark Golden ATM Card -->
+    <div class="atm-card">
+      <div class="atm-top">
+        <div class="atm-chip"></div>
+        <div class="atm-logo"><span class="gold-dot"></span></div>
+      </div>
+      <div class="atm-middle" style="flex-direction: column; align-items: flex-start; justify-content: center;">
+        <div class="atm-number">{{ currentHospitalName }}</div>
+        <div *ngIf="isPatientViewer" class="atm-label" style="font-size: 0.85rem; margin-top: 5px;">PATIENT VIEWER</div>
+      </div>
+      <div class="atm-bottom">
+        <div>
+          <div class="atm-label">NETWORK ID</div>
+          <div class="atm-value">#7842</div>
+        </div>
+        <div>
+          <div class="atm-label">STATUS</div>
+          <div class="atm-value text-success">CONNECTED</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="grid-2col">
-  <div class="clinical-card list-view">
-    <div class="card-header">
-      <h2>Network Hospitals</h2>
+<!-- Map and Diseases Layout -->
+<div class="war-room-grid">
+  
+  <!-- All connected hospitals Map -->
+    <div class="clinical-card map-card p-0" style="grid-column: span 1;">
+      <div class="card-header border-bottom p-4">
+        <h2>Hospital Network Grid</h2>
+      </div>
+      <div id="radarMap" class="map-container" style="height: 300px; width: 100%;"></div>
     </div>
-    <div class="skeleton-loader" *ngIf="isLoading">Loading...</div>
-    <ul *ngIf="!isLoading">
-      <li *ngFor="let h of hospitals; let last = last" class="list-item" [class.no-border]="last">
-        <div class="item-title">{{ h.name }}</div>
-        <div class="muted">{{ h.location }}</div>
+    
+    <!-- Medical Reports Review Queue -->
+    <div class="clinical-card p-0" style="grid-column: span 1;">
+      <div class="card-header border-bottom p-4">
+        <h2>Pending Medical Reports (Action Required)</h2>
+      </div>
+      <div class="empty-state" *ngIf="pendingReports.length === 0">
+        <p class="muted" style="font-family: var(--font-tech); text-transform: uppercase; font-size: 0.85rem;">No pending reports to review.</p>
+      </div>
+      <ul class="clean-list" *ngIf="pendingReports.length > 0">
+        <li *ngFor="let report of pendingReports; let last = last" class="list-card" [class.no-border]="last" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <div class="disease-title" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <strong>{{ report.patientName }}</strong>
+              <span class="badge" style="background-color: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); font-family: var(--font-tech);">{{ report.aadhaarNumber }}</span>
+            </div>
+            <div class="muted mt-2" style="font-size: 0.9rem; line-height: 1.4;">
+              Reported Recovery for: <strong style="color: var(--text-primary);">{{ report.diseaseName }}</strong><br>
+              <span style="font-size: 0.8rem;">Submitted: {{ report.submissionDate | date:'medium' }}</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto;">
+             <button class="btn-secondary" style="flex: 1; padding: 0.5rem; min-width: 80px;" (click)="viewReportFile(report.id)">View File</button>
+             <button class="btn-primary" style="flex: 1; padding: 0.5rem; min-width: 80px; background-color: #00ff66; color: #000; border: none;" (click)="approveReport(report.id)">Approve</button>
+             <button class="btn-primary" style="flex: 1; padding: 0.5rem; min-width: 80px; background-color: #ff1a1a; color: #fff; border: none;" (click)="rejectReport(report.id)">Reject</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  <!-- Major Diseases Column -->
+  <div class="clinical-card diseases-card">
+    <div class="card-header">
+      <h2>Major Diseases Tracked</h2>
+    </div>
+    <ul class="disease-list">
+      <li *ngFor="let d of majorDiseases" class="list-item flex-between">
+        <span class="item-title">{{ d.name }}</span>
+        <span class="badge badge-major">MAJOR</span>
       </li>
-      <li *ngIf="hospitals.length === 0" class="muted p-2">No hospitals in network.</li>
+      <li *ngIf="majorDiseases.length === 0" class="muted p-2">No major diseases tracked.</li>
     </ul>
   </div>
 
-  <div class="clinical-card list-view">
-    <div class="card-header">
-      <h2>Tracked Diseases</h2>
+  <!-- Hospital Blood Camps Management -->
+  <div class="clinical-card" *ngIf="!isPatientViewer" style="grid-column: span 1;">
+    <div class="card-header border-bottom p-4 flex-between">
+      <h2>My Hosted Blood Camps</h2>
+      <button class="btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" (click)="toggleOrganizeCamp()">
+        {{ isOrganizingCamp ? 'Cancel' : '+ Organize Camp' }}
+      </button>
     </div>
-    <div class="skeleton-loader" *ngIf="isLoading">Loading...</div>
-    <ul *ngIf="!isLoading">
-      <li *ngFor="let d of diseases; let last = last" class="list-item flex-between" [class.no-border]="last">
-        <div class="item-title">{{ d.name }}</div>
-        <span class="badge" [class.badge-major]="d.isMajor">
-          {{ d.isMajor ? 'MAJOR' : 'MINOR' }}
-        </span>
+    
+    <!-- Organize Form -->
+    <div class="p-4 border-bottom" *ngIf="isOrganizingCamp" style="background: rgba(0,0,0,0.3);">
+      <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--accent-cyan);">Organize New Blood Camp</h3>
+      <div class="form-group mb-2">
+        <label>Camp Title</label>
+        <input type="text" class="form-control" [(ngModel)]="newCamp.title" placeholder="e.g. Mega Spring Blood Drive">
+      </div>
+      <div class="form-group mb-2">
+        <label>Location</label>
+        <input type="text" class="form-control" [(ngModel)]="newCamp.location" placeholder="e.g. City Central Hall">
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <div class="form-group mb-2" style="flex: 1;">
+          <label>Date</label>
+          <input type="date" class="form-control" [(ngModel)]="newCamp.date">
+        </div>
+        <div class="form-group mb-2" style="flex: 1;">
+          <label>Time</label>
+          <input type="time" class="form-control" [(ngModel)]="newCamp.time">
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label>Description / Details</label>
+        <textarea class="form-control" [(ngModel)]="newCamp.description" rows="2" placeholder="Refreshments provided..."></textarea>
+      </div>
+      <button class="btn-primary w-100" (click)="submitCamp()">Publish Camp</button>
+    </div>
+
+    <!-- Active Camps List -->
+    <div class="empty-state" *ngIf="myCamps.length === 0 && !isOrganizingCamp">
+      <p class="muted" style="font-family: var(--font-tech); text-transform: uppercase; font-size: 0.85rem;">No active blood camps hosted.</p>
+    </div>
+    
+    <ul class="clean-list" *ngIf="myCamps.length > 0">
+      <li *ngFor="let camp of myCamps; let last = last" class="list-card" [class.no-border]="last" style="display: flex; flex-direction: column; gap: 0.5rem; cursor: pointer; padding: 1.25rem; border-bottom: 1px solid var(--border-color);" (click)="viewCampBookings(camp)">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <strong style="color: var(--text-primary); font-size: 1.1rem;">{{ camp.title }}</strong>
+          <span class="badge" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">{{ camp.date | date:'MMM d' }}</span>
+        </div>
+        <div class="muted" style="font-size: 0.9rem;">
+          <i class="fas fa-map-marker-alt"></i> {{ camp.location }} &nbsp;|&nbsp; <i class="far fa-clock"></i> {{ camp.time }}
+        </div>
+        <p class="muted" style="font-size: 0.85rem; margin-top: 0.25rem;">{{ camp.description }}</p>
+        
+        <!-- Bookings Sub-View (Expanded) -->
+        <div *ngIf="selectedCamp?.id === camp.id" class="mt-3 p-3" style="background: rgba(0,0,0,0.4); border-radius: 4px; border: 1px solid var(--card-border);">
+          <h4 style="font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+            <span>Registered Donors</span>
+            <span>{{ selectedCampBookings.length }} Bookings</span>
+          </h4>
+          <div *ngIf="selectedCampBookings.length === 0" class="muted" style="font-size: 0.8rem;">No donors have booked slots yet.</div>
+          
+          <table *ngIf="selectedCampBookings.length > 0" class="table" style="font-size: 0.8rem;">
+            <thead>
+              <tr>
+                <th style="padding: 0.5rem;">Patient</th>
+                <th style="padding: 0.5rem;">Blood</th>
+                <th style="padding: 0.5rem;">Slip #</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of selectedCampBookings">
+                <td style="padding: 0.5rem;">{{ b.patientName }}</td>
+                <td style="padding: 0.5rem; color: var(--accent-cyan); font-weight: bold;">{{ b.patientBloodGroup }}</td>
+                <td style="padding: 0.5rem; font-family: var(--font-tech);">{{ b.slipNumber }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
       </li>
-      <li *ngIf="diseases.length === 0" class="muted p-2">No diseases tracked.</li>
     </ul>
+  </div>
+
+</div>
+
+<!-- In-App Document Viewer Modal -->
+<div class="modal-overlay" *ngIf="selectedFileUrl || isLoadingFile">
+  <div class="modal-content clinical-card" style="width: 85%; height: 85vh; display: flex; flex-direction: column; padding: 0;">
+    <div class="modal-header border-bottom flex-between p-4" style="background: rgba(0,0,0,0.5);">
+      <h2 style="margin: 0; color: var(--text-primary);">Medical Report Viewer</h2>
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn-primary" [disabled]="!rawFileUrl" (click)="downloadFile()">Download File</button>
+        <button class="btn-danger" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+    <div class="modal-body" style="flex: 1; padding: 0; background: #e0e0e0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+      <div *ngIf="isLoadingFile" style="color: #000; font-family: var(--font-tech); font-size: 1.2rem;">
+        Decrypting File from Global Grid...
+      </div>
+      
+      <ng-container *ngIf="!isLoadingFile && selectedFileUrl">
+        <img *ngIf="selectedFileType === 'image'" [src]="selectedFileUrl" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        
+        <iframe *ngIf="selectedFileType === 'pdf'" [src]="selectedFileUrl" style="width: 100%; height: 100%; border: none;"></iframe>
+      </ng-container>
+    </div>
   </div>
 </div>

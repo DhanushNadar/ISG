@@ -1,0 +1,227 @@
+<div class="dashboard-header">
+  <div class="header-left">
+    <h1 class="page-title">My Health Portal</h1>
+    <p class="subtitle">Personal Medical History & Unified Global Grid Records</p>
+  </div>
+  
+  <div class="header-right">
+    <!-- Dark Golden ATM Card -->
+    <div class="atm-card">
+      <div class="atm-top">
+        <div class="atm-chip"></div>
+        <div class="atm-logo"><span class="gold-dot"></span></div>
+      </div>
+      <div class="atm-middle" style="flex-direction: column; align-items: flex-start; justify-content: center;">
+        <div class="atm-number">{{ maskedAadhaar }}</div>
+        <div class="atm-label" style="font-size: 0.85rem; margin-top: 5px; color: var(--accent-red, #ff1a1a);">{{ (profile?.name || 'Loading...') | uppercase }}</div>
+      </div>
+      <div class="atm-bottom">
+        <div>
+          <div class="atm-label">BLOOD GROUP</div>
+          <div class="atm-value text-danger">{{ profile?.bloodGroup || 'N/A' }}</div>
+        </div>
+        <div>
+          <div class="atm-label">STATUS</div>
+          <div class="atm-value text-success">VERIFIED</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="war-room-grid" *ngIf="profile">
+  
+  <div class="clinical-card map-card">
+    <div class="card-header">
+      <h2>My Health Timeline</h2>
+    </div>
+    
+    <div class="timeline-container p-4" *ngIf="profile.history && profile.history.length > 0">
+      <div class="timeline-item" *ngFor="let record of profile.history">
+        <div class="timeline-dot" [class.major-dot]="record.isMajor"></div>
+        <div class="timeline-content">
+          <h4>{{ record.diseaseName }}</h4>
+          <p class="muted">Diagnosed: {{ record.diagnosedDate | date }} | Status: {{ record.status }}</p>
+          <span class="badge" [class.badge-major]="record.isMajor">{{ record.isMajor ? 'MAJOR' : 'MINOR' }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="!profile.history || profile.history.length === 0" class="muted p-4">
+      No historical records found.
+    </div>
+  </div>
+
+  <div class="analytics-column">
+    <div class="clinical-card chart-card" style="height: auto;">
+      <div class="card-header">
+        <h2>Eligibility Status</h2>
+      </div>
+      <div class="p-4">
+        <h3 [class.text-success]="profile.eligibility === 'ELIGIBLE'" [class.text-danger]="profile.eligibility !== 'ELIGIBLE'">
+          {{ profile.eligibility }}
+        </h3>
+        <p class="muted mt-2">Based on your Global Grid medical records across all connected hospitals.</p>
+      </div>
+    </div>
+    
+    <div class="clinical-card chart-card mt-4" style="height: auto;">
+      <div class="card-header">
+        <h2>Recent Activity</h2>
+      </div>
+      <div class="p-4">
+        <p><strong>Last Visit:</strong> {{ profile.recentHospital }}</p>
+        <p><strong>Date:</strong> {{ profile.recentTestDate }}</p>
+      </div>
+    </div>
+    
+    <!-- Submit Medical Report Form -->
+    <div class="clinical-card mt-4 p-0">
+      <div class="card-header border-bottom">
+        <h2>Submit Medical Report</h2>
+      </div>
+      <div class="p-4" *ngIf="nextDisease">
+        <p class="muted mb-3">Please upload proof of medical recovery to clear this active disease from your record.</p>
+        
+        <div class="form-group mb-3">
+          <label>Disease Pending Verification</label>
+          <div class="form-control" style="background-color: var(--card-bg-light); cursor: not-allowed;">
+            <strong>{{ nextDisease.name }}</strong> <span class="badge" [class.badge-major]="nextDisease.isMajor" [class.badge-minor]="!nextDisease.isMajor">{{ nextDisease.isMajor ? 'MAJOR' : 'MINOR' }}</span>
+          </div>
+        </div>
+        
+        <div class="form-group mb-3">
+          <label>Upload Report (Max 5MB PDF/Image)</label>
+          <input type="file" class="form-control" accept=".pdf,image/*" (change)="onFileSelected($event)">
+        </div>
+        
+        <button class="btn-primary w-100" [disabled]="isSubmitting || !selectedFile" (click)="submitReport()">
+          {{ isSubmitting ? 'Submitting...' : 'Submit for Approval' }}
+        </button>
+      </div>
+      <div class="p-4" *ngIf="!nextDisease">
+        <p class="text-success m-0" style="font-family: var(--font-tech); text-transform: uppercase;">All health records are fully verified. No pending diseases require medical reports at this time.</p>
+      </div>
+    </div>
+    
+  </div>
+
+</div>
+
+<!-- Submission History -->
+<div class="clinical-card mt-4 p-0" *ngIf="profile">
+  <div class="card-header border-bottom">
+    <h2>My Submission History</h2>
+  </div>
+  <div class="empty-state" *ngIf="mySubmissions.length === 0">
+    You haven't submitted any medical reports yet.
+  </div>
+  <div class="table-responsive" *ngIf="mySubmissions.length > 0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Disease for Recovery</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sub of mySubmissions">
+          <td>{{ sub.submissionDate | date:'short' }}</td>
+          <td>{{ sub.diseaseName }}</td>
+          <td>
+            <span class="status-badge" 
+              [class.active-disease]="sub.status === 'APPROVED'" 
+              [class.recovered-disease]="sub.status === 'REJECTED'"
+              [style.color]="sub.status === 'PENDING' ? '#ffd700' : null">
+              {{ sub.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Global Blood Camps Advertisement -->
+<div class="clinical-card mt-4 p-0" *ngIf="profile">
+  <div class="card-header border-bottom p-4">
+    <h2 style="color: var(--accent-cyan); margin: 0;">Global Blood Camps</h2>
+    <p class="muted mt-2" style="font-size: 0.85rem;">Upcoming verified blood donation drives across the network.</p>
+  </div>
+  <div class="empty-state p-5 text-center" *ngIf="globalCamps.length === 0">
+    <p class="muted" style="font-family: var(--font-tech); text-transform: uppercase; margin: 0;">No blood camps are currently scheduled.</p>
+  </div>
+  <div class="p-4" *ngIf="globalCamps.length > 0" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    <div *ngFor="let camp of globalCamps" style="display: flex; flex-direction: column; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 12px; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(0, 255, 255, 0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+        <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-primary); line-height: 1.3;">{{ camp.title }}</h3>
+        <span class="badge" style="background: rgba(0, 255, 255, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 0.4rem 0.6rem;">{{ camp.date | date:'MMM d' }}</span>
+      </div>
+      <div class="muted" style="font-size: 0.9rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><strong style="color: var(--text-primary); min-width: 60px;">Host:</strong> {{ camp.hospitalName }}</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><strong style="color: var(--text-primary); min-width: 60px;">Location:</strong> {{ camp.location }}</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><strong style="color: var(--text-primary); min-width: 60px;">Time:</strong> {{ camp.time }}</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+         <p style="font-size: 0.85rem; margin: 0; color: var(--text-secondary); line-height: 1.5;">{{ camp.description }}</p>
+      </div>
+      
+      <button class="btn-primary w-100" style="margin-top: auto; padding: 0.75rem; font-weight: bold; font-family: var(--font-tech); text-transform: uppercase; letter-spacing: 1px;" 
+              [disabled]="profile.eligibility !== 'ELIGIBLE' || hasBooked(camp.id)"
+              [style.opacity]="profile.eligibility !== 'ELIGIBLE' || hasBooked(camp.id) ? '0.5' : '1'"
+              [style.cursor]="profile.eligibility !== 'ELIGIBLE' || hasBooked(camp.id) ? 'not-allowed' : 'pointer'"
+              (click)="bookCamp(camp.id)">
+        {{ hasBooked(camp.id) ? 'Already Booked' : (profile.eligibility === 'ELIGIBLE' ? 'Book Slot Now' : 'Not Eligible to Book') }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Tech Slips -->
+<div class="clinical-card mt-4 p-0" *ngIf="myCampBookings.length > 0">
+  <div class="card-header border-bottom">
+    <h2 style="color: #00ff66;">My Entry Slips</h2>
+  </div>
+  <div class="p-4" style="display: flex; flex-direction: column; gap: 1rem;">
+    <div *ngFor="let booking of myCampBookings" style="background: linear-gradient(135deg, rgba(20,20,20,1) 0%, rgba(30,30,30,1) 100%); border: 1px solid #00ff66; border-radius: 12px; padding: 1.5rem; display: flex; align-items: stretch; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 255, 102, 0.1);">
+      <!-- Stylistic side bar -->
+      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: #00ff66;"></div>
+      
+      <div style="flex: 1; padding-left: 1rem;">
+        <h3 style="margin: 0 0 0.5rem 0; color: #00ff66; text-transform: uppercase; letter-spacing: 1px; font-size: 1.2rem;">{{ booking.campTitle }}</h3>
+        <p class="muted" style="margin: 0 0 0.25rem 0; font-size: 0.9rem;">Date: <strong style="color: var(--text-primary);">{{ booking.campDate | date:'fullDate' }}</strong> at {{ booking.campTime }}</p>
+        <p class="muted" style="margin: 0 0 1rem 0; font-size: 0.9rem;">Location: <strong style="color: var(--text-primary);">{{ booking.campLocation }}</strong></p>
+        
+        <div style="display: flex; gap: 2rem;">
+          <div>
+            <div class="muted" style="font-size: 0.7rem; font-family: var(--font-tech); margin-bottom: 2px;">DONOR NAME</div>
+            <div style="font-family: var(--font-tech); letter-spacing: 1px;">{{ booking.patientName | uppercase }}</div>
+          </div>
+          <div>
+            <div class="muted" style="font-size: 0.7rem; font-family: var(--font-tech); margin-bottom: 2px;">BLOOD GROUP</div>
+            <div style="font-family: var(--font-tech); color: var(--accent-red); font-weight: bold;">{{ booking.patientBloodGroup }}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="border-left: 1px dashed rgba(255,255,255,0.2); padding-left: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 120px;">
+        <!-- Dummy QR Code UI -->
+        <div style="width: 80px; height: 80px; background: #fff; padding: 5px; margin-bottom: 0.5rem; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px;">
+           <div style="background: #000; grid-column: span 2; grid-row: span 2;"></div>
+           <div style="background: #000; grid-column: 4;"></div>
+           <div style="background: #000; grid-row: 3;"></div>
+           <div style="background: #000; grid-column: span 2; grid-row: span 2;"></div>
+           <div style="background: #000; grid-column: 3; grid-row: 4;"></div>
+        </div>
+        <div style="font-family: var(--font-tech); font-size: 0.7rem; color: #00ff66; letter-spacing: 1px;">
+          {{ booking.slipNumber }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="muted mt-4">
+  Loading your profile...
+</div>

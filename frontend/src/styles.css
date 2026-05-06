@@ -1,28 +1,31 @@
-/* Global Styles for Standard Clinical Medical UI */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Global Styles for Ultra-Luxury PulseNet Command Center */
 
 :root {
-  /* Clean Light Mode Aesthetic */
-  --bg-main: #f4f6f9;         /* Very soft gray/blue for main background */
-  --bg-card: #ffffff;         /* Pure white for content cards */
-  --card-border: #e2e8f0;     /* Soft border for structure */
+  /* Ultra-Luxury Obsidian Palette */
+  --bg-main: #000000;         /* Pure Abyss Black */
+  --bg-gradient: radial-gradient(circle at center top, rgba(20, 24, 34, 1) 0%, rgba(0, 0, 0, 1) 100%);
+  --bg-card: rgba(10, 10, 12, 0.6); /* Translucent Deep Space */
+  --card-border: rgba(255, 255, 255, 0.05); /* Micro-thin glass border */
   
-  --text-primary: #1e293b;    /* Dark slate for high contrast readability */
-  --text-secondary: #64748b;  /* Muted slate for secondary text */
-  --text-muted: #94a3b8;
+  --text-primary: #ffffff;    /* Absolute White */
+  --text-secondary: #8c9bb3;  /* Sleek Silver/Blue */
+  --text-muted: #4b5563;
   
-  --accent-primary: #d32f2f;  /* Standard Medical/Blood Red */
-  --accent-hover: #b71c1c;    
+  /* Electric Accents (Unified Blood Red Theme) */
+  --accent-cyan: #ff1a1a;     /* Bright Neon Blood Red */
+  --accent-magenta: #e60000;  /* Deep Blood Red */
+  --accent-gold: #ff3333;     /* Light Blood Red */
+  --accent-purple: #cc0000;   /* Dark Blood Red */
   
-  --accent-success: #10b981;  /* Standard Green for Eligible */
-  --accent-danger: #ef4444;   /* Standard Red for Not Eligible */
+  --shadow-neon-cyan: 0 0 10px rgba(255, 26, 26, 0.4);
+  --shadow-neon-magenta: 0 0 15px rgba(230, 0, 0, 0.5);
+  --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.8);
   
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --font-main: 'Inter', sans-serif;
+  --font-tech: 'Space Grotesk', monospace;
 }
 
-/* Base Reset */
+/* Base Reset & Background */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -30,18 +33,28 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg-main);
+  font-family: var(--font-main);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
+/* Typography Overhauls */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-family: var(--font-tech);
+  font-weight: 700;
+  letter-spacing: -0.5px;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+}
+
+h2 {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 1.1rem;
 }
 
 a {
@@ -52,28 +65,29 @@ a {
 button {
   cursor: pointer;
   border: none;
-  font-family: inherit;
-  transition: all 0.2s ease-in-out;
+  font-family: var(--font-tech);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrollbar */
+/* Custom Razor-Thin Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--accent-cyan);
+  box-shadow: var(--shadow-neon-cyan);
 }
 
 /* Core Layout & Components */
 .page-wrapper {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -81,89 +95,234 @@ button {
 .clinical-card {
   background: var(--bg-card);
   border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-sm);
-  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  border-radius: 16px;
   padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
 }
 
+/* Glow lines inside cards */
+.clinical-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+/* Buttons */
 .btn-primary {
-  background-color: var(--accent-primary);
-  color: white;
-  padding: 0.6rem 1.25rem;
+  background: rgba(255, 26, 26, 0.1);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(255, 26, 26, 0.3);
+  padding: 0.75rem 1.5rem;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-primary:hover {
-  background-color: var(--accent-hover);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 26, 26, 0.2);
+  box-shadow: var(--shadow-neon-cyan);
+  border-color: var(--accent-cyan);
 }
 
 .btn-secondary {
-  background-color: #f1f5f9;
-  color: var(--text-primary);
-  padding: 0.6rem 1.25rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
   border-radius: 4px;
   font-weight: 500;
   font-size: 0.95rem;
-  border: 1px solid var(--card-border);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-secondary:hover {
-  background-color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.btn-danger {
+  background: rgba(230, 0, 0, 0.15);
+  color: var(--accent-magenta);
+  border: 1px solid rgba(230, 0, 0, 0.4);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-danger:hover {
+  background: rgba(230, 0, 0, 0.3);
+  box-shadow: var(--shadow-neon-magenta);
+  border-color: var(--accent-magenta);
+}
+
+.btn-danger:disabled {
+  background-color: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border-color: transparent;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Tags / Badges (Monospaced Technical Feel) */
+.badge, .tag-eligible, .tag-not-eligible {
+  font-family: var(--font-tech);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  font-weight: 700;
 }
 
 .tag-eligible {
-    background-color: #ecfdf5;
-    color: #059669;
-    border: 1px solid #a7f3d0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    font-weight: 600;
+  background: rgba(255, 26, 26, 0.1);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(255, 26, 26, 0.3);
+  box-shadow: 0 0 10px rgba(255, 26, 26, 0.1);
 }
 
 .tag-not-eligible {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    font-weight: 600;
+  background: rgba(230, 0, 0, 0.1);
+  color: var(--accent-magenta);
+  border: 1px solid rgba(230, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(230, 0, 0, 0.1);
 }
 
-/* Global Form Controls */
+/* Ultra-Luxury Form Controls */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+  font-family: var(--font-tech);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
 }
 
 .form-control {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--card-border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  background-color: #fff;
+  padding: 0.75rem 0;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  transition: all 0.3s ease;
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
 }
 
 .form-control:focus {
   outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+  border-bottom: 1px solid var(--accent-cyan);
+  box-shadow: 0 5px 5px -5px rgba(255, 26, 26, 0.5);
+}
+
+/* Custom Select Dropdowns */
+select.form-control {
+  background-color: rgba(10,10,12, 0.9); /* Opaque for options */
+  padding-left: 0.5rem;
+  border-radius: 4px;
 }
 
 .w-100 {
   width: 100%;
+}
+
+.text-danger {
+  color: var(--accent-magenta);
+}
+
+.text-success {
+  color: var(--accent-cyan);
+}
+
+/* Beautiful Table Styling for Patient Portal History */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th, .table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table th {
+  font-family: var(--font-tech);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--font-tech);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.active-disease {
+  background: rgba(0, 255, 102, 0.1);
+  color: #00ff66;
+  border: 1px solid rgba(0, 255, 102, 0.3);
+}
+
+.recovered-disease {
+  background: rgba(255, 26, 26, 0.1);
+  color: #ff1a1a;
+  border: 1px solid rgba(255, 26, 26, 0.3);
+}
+
+/* Modal Overlay Styles for In-App Document Viewer */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }

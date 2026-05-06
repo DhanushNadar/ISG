@@ -2,11 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 3rem;
-  background-color: var(--bg-card);
-  border-bottom: 1px solid var(--card-border);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  padding: 1.25rem 3rem;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }
 
 .nav-brand {
@@ -14,19 +18,22 @@
 }
 
 .logo {
+  font-family: var(--font-tech);
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  letter-spacing: -0.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .logo-icon {
-  color: var(--accent-primary);
-  font-size: 1.6rem;
+  color: var(--accent-magenta);
+  font-size: 1.8rem;
   font-weight: 900;
+  text-shadow: var(--shadow-neon-magenta);
 }
 
 .nav-links {
@@ -35,19 +42,24 @@
 }
 
 .nav-link {
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-family: var(--font-tech);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   color: var(--text-secondary);
   padding: 0.5rem 0;
   border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .nav-link:hover {
   color: var(--text-primary);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .nav-link.active {
-  color: var(--accent-primary);
-  border-bottom: 2px solid var(--accent-primary);
+  color: var(--accent-cyan);
+  border-bottom: 2px solid var(--accent-cyan);
+  text-shadow: var(--shadow-neon-cyan);
 }

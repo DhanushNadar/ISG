@@ -35,23 +35,6 @@ label {
   color: var(--accent-danger);
 }
 
-input, select {
-  padding: 0.75rem;
-  border: 1px solid var(--card-border);
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 1rem;
-  background-color: #fafbfc;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-  background-color: white;
-}
-
 .hint {
   color: var(--text-secondary);
   font-size: 0.8rem;
@@ -68,9 +51,11 @@ input:focus, select:focus {
 }
 
 .alert-danger {
-  background-color: #fef2f2;
-  color: #991b1b;
+  background: rgba(230, 0, 0, 0.1);
+  color: var(--accent-magenta);
   padding: 1rem;
-  border-left: 4px solid #dc2626;
+  border-left: 4px solid var(--accent-magenta);
   border-radius: 4px;
+  font-family: var(--font-tech);
+  letter-spacing: 1px;
 }

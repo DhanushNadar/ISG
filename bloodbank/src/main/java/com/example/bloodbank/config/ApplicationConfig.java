@@ -1,6 +1,9 @@
 package com.example.bloodbank.config;
 
 import com.example.bloodbank.repository.UserRepository;
+import com.example.bloodbank.repository.PatientPortalCredentialRepository;
+import com.example.bloodbank.entity.User;
+import com.example.bloodbank.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +25,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository repository;
+    private final PatientPortalCredentialRepository patientPortalCredentialRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return username -> {
+            var userOpt = repository.findByEmail(username);
+            if (userOpt.isPresent()) {
+                return userOpt.get();
+            }
+            
+            var patientOpt = patientPortalCredentialRepository.findByAadhaarNumber(username);
+            if (patientOpt.isPresent()) {
+                return User.builder()
+                        .email(patientOpt.get().getAadhaarNumber())
+                        .password(patientOpt.get().getPassword())
+                        .role(Role.PATIENT)
+                        .build();
+            }
+            
+            throw new UsernameNotFoundException("User not found: " + username);
+        };
     }
 
     @Bean

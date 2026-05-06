@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { PatientProfileResponse } from '../../core/models/api.models';
@@ -8,7 +9,7 @@ import { PatientProfileResponse } from '../../core/models/api.models';
 @Component({
   selector: 'app-patient-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './patient-profile.component.html',
   styleUrl: './patient-profile.component.css'
 })
@@ -18,6 +19,7 @@ export class PatientProfileComponent implements OnInit {
   profile: PatientProfileResponse | null = null;
   isLoading = true;
   error = '';
+  newPassword = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +58,23 @@ export class PatientProfileComponent implements OnInit {
       },
       error: (err) => {
         alert('Failed to update disease status.');
+      }
+    });
+  }
+
+  setPortalPassword() {
+    if (!this.newPassword || this.newPassword.length < 6) {
+      alert('Password must be at least 6 characters.');
+      return;
+    }
+    this.apiService.setPortalPassword(this.aadhaar, this.newPassword).subscribe({
+      next: () => {
+        alert('Patient Portal password set successfully!');
+        this.newPassword = '';
+      },
+      error: (err) => {
+        alert('Failed to set password.');
+        console.error(err);
       }
     });
   }

@@ -27,6 +27,12 @@ export class AuthService {
     );
   }
 
+  patientLogin(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/patient-login`, data).pipe(
+      tap((res: any) => this.setToken(res.token))
+    );
+  }
+
   logout(): void {
     localStorage.removeItem('jwt_token');
     this.isAuthenticatedSubject.next(false);

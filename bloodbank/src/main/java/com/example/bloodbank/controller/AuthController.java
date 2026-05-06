@@ -3,6 +3,7 @@ package com.example.bloodbank.controller;
 import com.example.bloodbank.dto.AuthRequest;
 import com.example.bloodbank.dto.AuthResponse;
 import com.example.bloodbank.dto.RegisterRequest;
+import com.example.bloodbank.dto.PatientLoginRequest;
 import com.example.bloodbank.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +35,13 @@ public class AuthController {
     ) {
         log.info("Received login attempt for user: {}", request.getEmail());
         return ResponseEntity.ok(service.authenticate(request));
+    }
+
+    @PostMapping("/patient-login")
+    public ResponseEntity<AuthResponse> patientLogin(
+            @RequestBody PatientLoginRequest request
+    ) {
+        log.info("Received patient login attempt for Aadhaar: {}", request.getAadhaarNumber());
+        return ResponseEntity.ok(service.patientLogin(request));
     }
 }

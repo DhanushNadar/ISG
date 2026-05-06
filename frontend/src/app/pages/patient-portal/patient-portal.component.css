@@ -1,0 +1,229 @@
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-family: var(--font-tech);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+}
+
+/* --- DARK RUBY ATM CARD FOR INDIVIDUAL PATIENTS --- */
+.atm-card {
+  width: 340px;
+  height: 200px;
+  background: linear-gradient(135deg, #1f0505 0%, #3d0000 50%, #1a0000 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #ff4d4d;
+  box-shadow: 0 10px 30px rgba(255, 77, 77, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  font-family: var(--font-tech);
+}
+
+.atm-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-20deg);
+  animation: shine 6s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  20% { left: 200%; }
+  100% { left: 200%; }
+}
+
+.atm-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.atm-chip {
+  width: 45px; height: 32px;
+  background: linear-gradient(135deg, #990000, #4d0000);
+  border-radius: 6px; 
+  border: 1px solid rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.4);
+  position: relative;
+}
+
+.atm-chip::before {
+  content: ''; position: absolute; top: 10px; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.3);
+}
+.atm-chip::after {
+  content: ''; position: absolute; top: 20px; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.3);
+}
+
+.atm-logo {
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+}
+
+.gold-dot {
+  width: 8px; height: 8px;
+  background: #00ff66;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff66;
+}
+
+.atm-middle {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.atm-number {
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.atm-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.atm-label {
+  font-size: 0.6rem;
+  color: rgba(255, 77, 77, 0.6);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.atm-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* --- GRID & TIMELINE --- */
+.war-room-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  background-color: rgba(255,255,255,0.02);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.card-header h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 20px;
+  bottom: -1.5rem;
+  width: 2px;
+  background: rgba(255,255,255,0.1);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00ff66;
+  margin-top: 4px;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0,255,102,0.4);
+}
+
+.major-dot {
+  background: #ff1a1a;
+  box-shadow: 0 0 10px rgba(255,26,26,0.4);
+}
+
+.timeline-content h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: var(--font-tech);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+  background: rgba(255,255,255,0.1);
+}
+
+.badge-major {
+  background: rgba(255, 26, 26, 0.2);
+  color: #ff1a1a;
+  border: 1px solid rgba(255, 26, 26, 0.3);
+}
+
+.muted {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.p-4 { padding: 1.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }

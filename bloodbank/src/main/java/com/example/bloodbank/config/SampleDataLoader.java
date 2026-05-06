@@ -14,6 +14,7 @@ import com.example.bloodbank.repository.HospitalRepository;
 import com.example.bloodbank.repository.PatientDiseaseRepository;
 import com.example.bloodbank.repository.PatientRepository;
 import com.example.bloodbank.repository.UserRepository;
+import com.example.bloodbank.repository.PatientPortalCredentialRepository;
 import com.example.bloodbank.entity.User;
 import com.example.bloodbank.entity.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,7 @@ public class SampleDataLoader implements CommandLineRunner {
     private final BloodRecordRepository bloodRecordRepository;
     private final BloodDonationRepository bloodDonationRepository;
     private final UserRepository userRepository;
+    private final PatientPortalCredentialRepository patientPortalCredentialRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -56,6 +58,16 @@ public class SampleDataLoader implements CommandLineRunner {
             userRepository.save(admin);
         }
 
+        if (userRepository.findByEmail("a@a.com").isEmpty()) {
+            User hospitalFaculty = User.builder()
+                .email("a@a.com")
+                .password(passwordEncoder.encode("a"))
+                .role(Role.HOSPITAL)
+                .hospitalId(1L)
+                .build();
+            userRepository.save(hospitalFaculty);
+        }
+
         if (hospitalRepository.count() == 0) {
             hospitalRepository.save(Hospital.builder().name("City Central Hospital").location("Downtown").contactNumber("1234567890").build());
             hospitalRepository.save(Hospital.builder().name("Sunrise Healthcare Clinic").location("Uptown").contactNumber("0987654321").build());
@@ -72,6 +84,13 @@ public class SampleDataLoader implements CommandLineRunner {
             // PATIENT 1: John Doe (NOT_ELIGIBLE due to active Leukemia)
             Patient patient1 = Patient.builder().aadhaarNumber("123456789012").name("John Doe").age(30).gender("Male").bloodGroup("O+").phone("9876543210").email("johndoe@example.com").createdAt(LocalDateTime.now()).hospital(hospital1).build();
             patient1 = patientRepository.save(patient1);
+            
+            // Seed Portal Credential for John Doe
+            com.example.bloodbank.entity.PatientPortalCredential cred = com.example.bloodbank.entity.PatientPortalCredential.builder()
+                .aadhaarNumber("123456789012")
+                .password(passwordEncoder.encode("password123"))
+                .build();
+            patientPortalCredentialRepository.save(cred);
 
             bloodRecordRepository.save(BloodRecord.builder().patient(patient1).hospital(hospital1).hemoglobin(11.5).platelets(150000.0).rbc(4.5).wbc(8000.0).recordDate(LocalDate.now().minusDays(10)).build());
             patientDiseaseRepository.save(PatientDisease.builder().patient(patient1).disease(anemia).diagnosedDate(LocalDate.now().minusYears(1)).status(DiseaseStatus.RECOVERED).isCurrent(false).build());

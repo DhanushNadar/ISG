@@ -2,6 +2,7 @@ package com.example.bloodbank.controller;
 
 import com.example.bloodbank.dto.PatientDTO;
 import com.example.bloodbank.dto.PatientProfileResponse;
+import com.example.bloodbank.dto.SetPatientPasswordRequest;
 import com.example.bloodbank.service.PatientService;
 import com.example.bloodbank.entity.User;
 import jakarta.validation.Valid;
@@ -35,14 +36,38 @@ public class PatientController {
     }
 
     @GetMapping("/{aadhaar}")
-    public ResponseEntity<PatientProfileResponse> getPatientProfile(@PathVariable String aadhaar) {
+    public ResponseEntity<PatientProfileResponse> getPatientProfile(@PathVariable String aadhaar, @AuthenticationPrincipal User user) {
         log.info("Fetching patient profile for Aadhaar: {}", aadhaar);
-        return ResponseEntity.ok(patientService.getPatientProfile(aadhaar));
+        return ResponseEntity.ok(patientService.getPatientProfile(aadhaar, user));
+    }
+
+    @PostMapping("/{aadhaar}/emergency-access")
+    public ResponseEntity<PatientProfileResponse> triggerEmergencyAccess(
+            @PathVariable String aadhaar,
+            @RequestBody Map<String, String> requestBody,
+            @AuthenticationPrincipal User user) {
+        
+        String reason = requestBody.get("reason");
+        if (reason == null || reason.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        log.warn("Emergency access triggered for Aadhaar: {} by User: {}", aadhaar, user.getEmail());
+        return ResponseEntity.ok(patientService.triggerEmergencyAccess(aadhaar, reason, user));
     }
 
     @GetMapping("/{id}/eligibility")
     public ResponseEntity<Map<String, String>> checkEligibility(@PathVariable Long id) {
         String status = patientService.checkEligibility(id);
         return ResponseEntity.ok(Map.of("eligibility", status));
+    }
+
+    @PostMapping("/{aadhaar}/set-portal-password")
+    public ResponseEntity<Void> setPortalPassword(
+            @PathVariable String aadhaar,
+            @RequestBody SetPatientPasswordRequest request) {
+        log.info("Setting portal password for Aadhaar: {}", aadhaar);
+        patientService.setPortalPassword(aadhaar, request.getPassword());
+        return ResponseEntity.ok().build();
     }
 }

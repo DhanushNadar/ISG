@@ -70,3 +70,29 @@ export interface PatientProfileResponse {
     eligibility: string; // "ELIGIBLE" or "NOT_ELIGIBLE"
     history: PatientDiseaseResponse[];
 }
+
+export interface BloodCampDTO {
+    id: number;
+    hospitalId: number;
+    hospitalName: string;
+    title: string;
+    location: string;
+    date: string;
+    time: string;
+    description: string;
+}
+
+export interface BloodCampBookingDTO {
+    id: number;
+    campId: number;
+    campTitle: string;
+    campLocation: string;
+    campDate: string;
+    campTime: string;
+    patientId: number;
+    patientName: string;
+    patientBloodGroup: string;
+    patientAadhaar: string;
+    slipNumber: string;
+    bookingTime: string;
+}
