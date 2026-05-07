@@ -27,7 +27,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       # Inject your resend API Key
-      - RESEND_API_KEY=${RESEND_API_KEY:-re_dbMWsLg6_MnvT5LT9L1nxHZMGQSYTkXE9}
+      - RESEND_API_KEY=${RESEND_API_KEY}
     depends_on:
       - db
 
