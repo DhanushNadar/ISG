@@ -19,4 +19,8 @@ public class HospitalDTO {
     private String location;
     
     private String contactNumber;
+
+    private Double latitude;
+
+    private Double longitude;
 }

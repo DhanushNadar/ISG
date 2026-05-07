@@ -20,6 +20,8 @@ public class HospitalService {
                 .name(dto.getName())
                 .location(dto.getLocation())
                 .contactNumber(dto.getContactNumber())
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
                 .build();
                 
         hospital = hospitalRepository.save(hospital);
@@ -34,6 +36,8 @@ public class HospitalService {
                         .name(h.getName())
                         .location(h.getLocation())
                         .contactNumber(h.getContactNumber())
+                        .latitude(h.getLatitude())
+                        .longitude(h.getLongitude())
                         .build())
                 .collect(Collectors.toList());
     }

@@ -69,8 +69,8 @@ public class SampleDataLoader implements CommandLineRunner {
         }
 
         if (hospitalRepository.count() == 0) {
-            hospitalRepository.save(Hospital.builder().name("City Central Hospital").location("Downtown").contactNumber("1234567890").build());
-            hospitalRepository.save(Hospital.builder().name("Sunrise Healthcare Clinic").location("Uptown").contactNumber("0987654321").build());
+            hospitalRepository.save(Hospital.builder().name("City Central Hospital").location("Mumbai, Maharashtra").contactNumber("1234567890").latitude(19.0760).longitude(72.8777).build());
+            hospitalRepository.save(Hospital.builder().name("Sunrise Healthcare Clinic").location("Pune, Maharashtra").contactNumber("0987654321").latitude(18.5204).longitude(73.8567).build());
         }
 
         if (patientRepository.count() == 0) {

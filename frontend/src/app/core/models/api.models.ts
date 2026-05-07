@@ -15,6 +15,8 @@ export interface HospitalDTO {
     name: string;
     location: string;
     contactNumber: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface DiseaseDTO {

@@ -67,7 +67,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    this.apiService.getHospitals().subscribe(data => this.hospitals = data);
+    this.apiService.getHospitals().subscribe(data => {
+      this.hospitals = data;
+      this.refreshMap();
+    });
+    
     this.apiService.getDiseases().subscribe(data => {
       this.diseases = data;
       this.majorDiseases = data.filter(d => d.isMajor);
@@ -199,8 +203,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   initMap() {
     this.map = L.map('radarMap', {
-      center: [40.7128, -74.0060], // Mock center (NY)
-      zoom: 12,
+      center: [20.5937, 78.9629], // India center
+      zoom: 5,
       zoomControl: false,
       attributionControl: false
     });
@@ -209,25 +213,33 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19
     }).addTo(this.map);
+    
+    this.refreshMap();
+  }
 
-    // Mock Hospitals
-    const hospitals = [
-      { lat: 40.7128, lng: -74.0060, name: 'Central General', status: 'stable' },
-      { lat: 40.7300, lng: -73.9950, name: 'Mercy Clinic', status: 'stable' },
-      { lat: 40.7000, lng: -74.0200, name: 'St. Judes', status: 'stable' },
-    ];
+  private refreshMap() {
+    if (!this.map) return;
+    
+    // Clear existing circle markers
+    this.map.eachLayer((layer) => {
+      if (layer instanceof L.CircleMarker) {
+        this.map!.removeLayer(layer);
+      }
+    });
 
-    hospitals.forEach(h => {
-      const color = '#00ff66'; // Stable green
-      const circle = L.circleMarker([h.lat, h.lng], {
-        radius: 8,
-        fillColor: color,
-        color: color,
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-      }).addTo(this.map!);
-      circle.bindPopup(`<b>${h.name}</b><br>Status: Connected`);
+    this.hospitals.forEach(h => {
+      if (h.latitude && h.longitude) {
+        const color = '#00ff66'; // Stable green
+        const circle = L.circleMarker([h.latitude, h.longitude], {
+          radius: 8,
+          fillColor: color,
+          color: color,
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
+        }).addTo(this.map!);
+        circle.bindPopup(`<b>${h.name}</b><br>${h.location}<br>Status: Connected`);
+      }
     });
   }
 
